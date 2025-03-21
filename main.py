@@ -37,3 +37,18 @@ class User:
                 if row["username"] == username and row["password"] == hash_password(password):
                     return True
         return False
+# User input class
+class UserInput:
+    def __init__(self, username, vehicle_type, fuel_type, fuel_efficiency, distance_travelled, emission_month):
+        self.username = username
+        self.vehicle_type = vehicle_type
+        self.fuel_type = fuel_type
+        self.fuel_efficiency = fuel_efficiency
+        self.distance_travelled = distance_travelled
+        self.emission_month = emission_month
+
+    def validate(self):
+        if self.vehicle_type not in ["Car", "Motorcycle", "Van"]:
+            raise ValueError("Invalid vehicle type. Choose Car, Motorcycle, or Van.")
+        if self.fuel_efficiency <= 0 or self.distance_travelled <= 0:
+            raise ValueError("Fuel efficiency and distance must be positive numbers.")
