@@ -34,3 +34,6 @@ class User:
         with open(USER_FILE, "r") as file:
             reader = csv.DictReader(file)
             for row in reader:
+                if row["username"] == username and row["password"] == hash_password(password):
+                    return True
+        return False
