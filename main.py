@@ -137,6 +137,25 @@ class EmissionHistory:
             writer.writeheader()
             writer.writerows(data)
             
+# Emission history viewer
+class EmissionHistoryViewer:
+    @staticmethod
+    def view_emission_history(username):
+        if not os.path.exists(EMISSION_FILE):
+            print("No emission history found.")
+            return
+        
+        with open(EMISSION_FILE, "r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row["username"] == username:
+                    print("\n📜 Emission History:")
+                    for month, emission in row.items():
+                        if month != "username" and emission:
+                            print(f"{month}: {emission} kg CO₂")
+                    return
+            print("No emission records found for this user.")
+            
 def get_calculator(user_input, urban_mode=False):
     if user_input.fuel_efficiency and user_input.fuel_type:  # Check if fuel data is available
         return FuelBasedCalculator(user_input)
