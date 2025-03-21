@@ -87,6 +87,23 @@ class UrbanAdjustmentCalculator(CarbonFootprintCalculator):
         self.carbon_emission = (self.user_input.distance_travelled * self.ADJUSTMENT_FACTOR) * self.EMISSION_FACTOR
         return self.carbon_emission
 
+
+# Carbon footprint summary
+class CarbonFootPrintSummary:
+    def __init__(self, user_input, carbon_emission):
+        self.user_input = user_input
+        self.carbon_emission = carbon_emission
+    
+    def display_summary(self):
+        print("\n📊 Carbon Footprint Summary:")
+        print(f"User: {self.user_input.username}")
+        print(f"Vehicle Type: {self.user_input.vehicle_type}")
+        print(f"Fuel Type: {self.user_input.fuel_type}")
+        print(f"Fuel Efficiency: {self.user_input.fuel_efficiency} km/L")
+        print(f"Distance Traveled: {self.user_input.distance_travelled} km")
+        print(f"Month: {self.user_input.emission_month}")
+        print(f"Total Carbon Emission: {self.carbon_emission:.2f} kg CO₂\n")
+
 def get_calculator(user_input, urban_mode=False):
     if user_input.fuel_efficiency and user_input.fuel_type:  # Check if fuel data is available
         return FuelBasedCalculator(user_input)
