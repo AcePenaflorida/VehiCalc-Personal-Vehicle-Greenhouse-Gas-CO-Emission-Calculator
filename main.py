@@ -7,7 +7,7 @@ import os
 USER_FILE = "users.csv"
 EMISSION_FILE = "emission_history.csv"
 
-# Utility function to hash passwords
+# Utility function to hash password
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
