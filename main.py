@@ -104,6 +104,39 @@ class CarbonFootPrintSummary:
         print(f"Month: {self.user_input.emission_month}")
         print(f"Total Carbon Emission: {self.carbon_emission:.2f} kg CO₂\n")
 
+# Store emission history
+class EmissionHistory:
+    def __init__(self, user_input, carbon_emission):
+        self.user_input = user_input
+        self.carbon_emission = carbon_emission
+
+    def store_emission(self):
+        if not os.path.exists(EMISSION_FILE):
+            with open(EMISSION_FILE, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["username", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+
+        data = []
+        found = False
+
+        with open(EMISSION_FILE, "r", newline="") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row["username"] == self.user_input.username:
+                    row[self.user_input.emission_month] = str(float(row.get(self.user_input.emission_month, "0") or 0) + self.carbon_emission)
+                    found = True
+                data.append(row)
+
+        if not found:
+            new_entry = {"username": self.user_input.username, self.user_input.emission_month: str(self.carbon_emission)}
+            data.append(new_entry)
+
+        with open(EMISSION_FILE, "w", newline="") as file:
+            fieldnames = ["username"] + ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data)
+            
 def get_calculator(user_input, urban_mode=False):
     if user_input.fuel_efficiency and user_input.fuel_type:  # Check if fuel data is available
         return FuelBasedCalculator(user_input)
