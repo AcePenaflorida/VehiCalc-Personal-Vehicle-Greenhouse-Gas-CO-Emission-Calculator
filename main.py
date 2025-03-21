@@ -52,10 +52,38 @@ class UserInput:
             raise ValueError("Invalid vehicle type. Choose Car, Motorcycle, or Van.")
         if self.fuel_efficiency <= 0 or self.distance_travelled <= 0:
             raise ValueError("Fuel efficiency and distance must be positive numbers.")
-class CarbonFootprintCalculator:
+
+class CarbonFootprintCalculator: #Parent
     def __init__(self, user_input):
         self.user_input = user_input
         self.carbon_emission = 0
 
     def calculate_carbon_emission(self):
         pass
+
+# Fuel-based calculator
+class FuelBasedCalculator(CarbonFootprintCalculator):
+    EMISSION_FACTORS = {"Gasoline": 2.31, "Diesel": 2.68}
+    
+    def calculate_carbon_emission(self):
+        fuel_used = self.user_input.distance_travelled / self.user_input.fuel_efficiency
+        self.carbon_emission = fuel_used * self.EMISSION_FACTORS.get(self.user_input.fuel_type, 0)
+        return self.carbon_emission
+
+# Distance-based calculator
+class DistanceBasedCalculator(CarbonFootprintCalculator):
+    AVERAGE_EMISSION_FACTOR = 0.21  # kg CO₂ per km
+    
+    def calculate_carbon_emission(self):
+        self.carbon_emission = self.user_input.distance_travelled * self.AVERAGE_EMISSION_FACTOR
+        return self.carbon_emission
+
+# Urban adjustment calculator
+class UrbanAdjustmentCalculator(CarbonFootprintCalculator):
+    ADJUSTMENT_FACTOR = 1.2
+    EMISSION_FACTOR = 0.21  # kg CO₂ per km
+    
+    def calculate_carbon_emission(self):
+        self.carbon_emission = (self.user_input.distance_travelled * self.ADJUSTMENT_FACTOR) * self.EMISSION_FACTOR
+        return self.carbon_emission
+
