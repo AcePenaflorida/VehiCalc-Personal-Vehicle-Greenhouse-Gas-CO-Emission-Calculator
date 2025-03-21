@@ -165,3 +165,73 @@ def get_calculator(user_input, urban_mode=False):
         return DistanceBasedCalculator(user_input)
 
 
+if __name__ == "__main__":
+    while True:
+        print("\n[1] Sign Up\n[2] Log In\n[3] Exit")
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+            user = User(username, password)
+            user.save_user()
+            print("User registered successfully!")
+
+        elif choice == "2":
+            username = input("Enter username: ")
+            password = input("Enter password: ")
+            
+            if User.validate_user(username, password):
+                os.system("cls")
+                print("Login successful!")
+                status = True
+                
+                while status:
+                    print("\n[1] Record Emission\n[2] View Emission History\n[3] Exit")
+                    action = input("Action: ")
+                    
+                    if action == "1":
+                        
+                        vehicle_type = input("Enter vehicle type (Car, Motorcycle, Van): ")
+                        fuel_type = input("Enter fuel type (Gasoline, Diesel) or press Enter if unknown: ")
+                        fuel_efficiency = input("Enter fuel efficiency (km/L) or press Enter if unknown: ")
+                        distance_travelled = float(input("Enter distance travelled (km): "))
+                        emission_month = input("Enter month (e.g., Jan, Feb, etc.): ")
+                        urban_mode = input("Is the travel in urban traffic? (yes/no): ").strip().lower() == "yes"
+                        
+                        # Convert fuel efficiency input to float if provided
+                        fuel_efficiency = float(fuel_efficiency) if fuel_efficiency else None
+                        user_input = UserInput(username, vehicle_type, fuel_type, fuel_efficiency, distance_travelled, emission_month)
+                        calculator = get_calculator(user_input, urban_mode)
+                        
+                        # Calculate emission
+                        emission = calculator.calculate_carbon_emission()
+                                                
+                        
+                        
+                        summary = CarbonFootPrintSummary(user_input, emission)
+                        summary.display_summary()
+                        
+                        history = EmissionHistory(user_input, emission)
+                        history.store_emission()
+                    
+                    elif action == "2":
+                        EmissionHistoryViewer.view_emission_history(username)
+                    
+                    elif action == "3":
+                        status = False
+                    
+                    else:
+                        print("Invalid Input. Please try again.")
+            
+            else:
+                print("Invalid username or password.")
+
+        elif choice == "3":
+            print("Goodbye!")
+            exit()
+        
+        else:
+            print("Invalid choice. Please try again.")
+
+
