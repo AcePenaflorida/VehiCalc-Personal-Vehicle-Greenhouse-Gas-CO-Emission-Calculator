@@ -52,3 +52,10 @@ class UserInput:
             raise ValueError("Invalid vehicle type. Choose Car, Motorcycle, or Van.")
         if self.fuel_efficiency <= 0 or self.distance_travelled <= 0:
             raise ValueError("Fuel efficiency and distance must be positive numbers.")
+class CarbonFootprintCalculator:
+    def __init__(self, user_input):
+        self.user_input = user_input
+        self.carbon_emission = 0
+
+    def calculate_carbon_emission(self):
+        pass
