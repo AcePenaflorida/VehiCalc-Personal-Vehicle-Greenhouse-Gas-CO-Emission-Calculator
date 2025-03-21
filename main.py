@@ -87,3 +87,12 @@ class UrbanAdjustmentCalculator(CarbonFootprintCalculator):
         self.carbon_emission = (self.user_input.distance_travelled * self.ADJUSTMENT_FACTOR) * self.EMISSION_FACTOR
         return self.carbon_emission
 
+def get_calculator(user_input, urban_mode=False):
+    if user_input.fuel_efficiency and user_input.fuel_type:  # Check if fuel data is available
+        return FuelBasedCalculator(user_input)
+    elif urban_mode:  # If urban mode is specified, apply urban adjustment
+        return UrbanAdjustmentCalculator(user_input)
+    else:  # Default to distance-based calculation
+        return DistanceBasedCalculator(user_input)
+
+
