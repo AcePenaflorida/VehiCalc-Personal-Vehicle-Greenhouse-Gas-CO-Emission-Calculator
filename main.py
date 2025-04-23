@@ -374,7 +374,7 @@ def handle_signup():
     except IOError as e:
         print(f"\n❌ Database error: {str(e)}")
     
-    input("Press Enter to try again...")
+    input("Press Enter to continue...")
 
 def handle_login():
     clear_screen()
