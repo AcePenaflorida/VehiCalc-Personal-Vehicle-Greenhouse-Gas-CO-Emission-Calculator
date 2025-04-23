@@ -1,4 +1,3 @@
-# VehiCalc - Enhanced with robust validation and error handling
 import csv
 import hashlib
 import os
@@ -375,7 +374,7 @@ def handle_signup():
     except IOError as e:
         print(f"\n❌ Database error: {str(e)}")
     
-    input("Press Enter to continue...")
+    input("Press Enter to try again...")
 
 def handle_login():
     clear_screen()
