@@ -350,16 +350,32 @@ def handle_signup():
     password = input("Enter password (minimum 8 characters): ").strip()
     
     try:
+        # Validate both fields FIRST, collect all errors
+        errors = []
+        try:
+            validate_username(username)
+        except ValueError as e:
+            errors.append(str(e))
+        
+        try:
+            validate_password(password)
+        except ValueError as e:
+            errors.append(str(e))
+        
+        if errors:
+            raise ValueError("\n- " + "\n- ".join(errors))  # Combine errors
+        
+        # Proceed if validation passes
         user = User(username, password)
         user.save_user()
         print("\n✅ User registered successfully!")
-        input("Press Enter to continue...")
+    
     except ValueError as e:
         print(f"\n❌ Registration failed: {str(e)}")
-        input("Press Enter to try again...")
     except IOError as e:
         print(f"\n❌ Database error: {str(e)}")
-        input("Press Enter to try again...")
+    
+    input("Press Enter to continue...")
 
 def handle_login():
     clear_screen()
